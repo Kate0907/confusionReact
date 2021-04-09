@@ -3,10 +3,22 @@ import logo from './logo.svg';
 import { Navbar, NavbarBrand } from 'reactstrap'
 import Menu from './components/MenuComponent';
 import './App.css';
+import {DISHES} from "./shared/dishes"
 
 // this is the App component
 class App extends Component {
+
+  constructor(props) {
+    super(props)
+    
+    this.state = {
+      dishes:DISHES
+    }
+}
+
+
   render() {
+    
     return (
       <div >
         { /* render the Navbar component */ }
@@ -17,11 +29,13 @@ class App extends Component {
         </Navbar>
 
         {/* render the Menu component  */}
-        <Menu />
+        <Menu dishes={ this.state.dishes}/>
 
       </div>
     );
+    
   }
+  
 }
 
 export default App;
