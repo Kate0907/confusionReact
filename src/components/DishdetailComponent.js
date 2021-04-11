@@ -32,17 +32,22 @@ class Dishdetail extends Component {
 			var MONTHS = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ];
 
 			const com = dish.comments.map((eachComment) => {
-				var date = new Date(eachComment.date);
-				var month = date.getMonth();
-				var year = date.getFullYear();
-				var day = date.getDate();
+				// var date = new Date(eachComment.date);
+				// var month = date.getMonth();
+				// var year = date.getFullYear();
+				// var day = date.getDate();
 
 				return (
-					<div key={eachComment.id} className="mx=0 px=0 height=20px">
+					<div key={eachComment.id}>
 						<li className="list-unstyled py-2">{eachComment.comment}</li>
 						<li className="list-unstyled py-2">
-							-- {eachComment.author} ,
-							{MONTHS[month]} {day}, {year}
+							-- {eachComment.author} ,{' '}
+							{new Intl.DateTimeFormat('en-US', {
+								year: 'numeric',
+								month: 'short',
+								day: '2-digit'
+							}).format(new Date(Date.parse(eachComment.date)))}
+							{/* {MONTHS[month]} {day}, {year} */}
 						</li>
 					</div>
 				);
