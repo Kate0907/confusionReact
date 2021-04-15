@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { Link } from 'react-router-dom';
 function Footer(props) {
 	return (
 		<div className="footer">
@@ -9,16 +9,16 @@ function Footer(props) {
 						<h5>Links</h5>
 						<ul className="list-unstyled">
 							<li>
-								<a href="#">Home</a>
+								<Link to="/home">Home</Link>
 							</li>
 							<li>
-								<a href="#">About</a>
+								<Link to="/aboutus">About</Link>
 							</li>
 							<li>
-								<a href="#">Menu</a>
+								<Link to="/menu">Menu</Link>
 							</li>
 							<li>
-								<a href="contactus.html">Contact</a>
+								<Link to="/contactus">Contact</Link>
 							</li>
 						</ul>
 					</div>
@@ -31,30 +31,30 @@ function Footer(props) {
 							<i className="fa fa-phone fa-lg" />: +852 1234 5678<br />
 							<i className="fa fa-fax fa-lg" />: +852 8765 4321<br />
 							<i className="fa fa-envelope fa-lg" />:{' '}
-							<a href="mailto:confusion@food.net">confusion@food.net</a>
+							<a to="mailto:confusion@food.net">confusion@food.net</a>
 						</address>
 					</div>
 					<div className="col-12 col-sm-4 align-self-center">
 						<div className="text-center">
-							<a className="btn btn-social-icon btn-google" href="http://google.com/+">
+							<a className="btn btn-social-icon btn-google" to="http://google.com/+">
 								<i className="fa fa-google-plus" />
 							</a>
 							<a
 								className="btn btn-social-icon btn-facebook"
-								href="http://www.facebook.com/profile.php?id="
+								to="http://www.facebook.com/profile.php?id="
 							>
 								<i className="fa fa-facebook" />
 							</a>
-							<a className="btn btn-social-icon btn-linkedin" href="http://www.linkedin.com/in/">
+							<a className="btn btn-social-icon btn-linkedin" to="http://www.linkedin.com/in/">
 								<i className="fa fa-linkedin" />
 							</a>
-							<a className="btn btn-social-icon btn-twitter" href="http://twitter.com/">
+							<a className="btn btn-social-icon btn-twitter" to="http://twitter.com/">
 								<i className="fa fa-twitter" />
 							</a>
-							<a className="btn btn-social-icon btn-google" href="http://youtube.com/">
+							<a className="btn btn-social-icon btn-google" to="http://youtube.com/">
 								<i className="fa fa-youtube" />
 							</a>
-							<a className="btn btn-social-icon" href="mailto:">
+							<a className="btn btn-social-icon" to="mailto:">
 								<i className="fa fa-envelope-o" />
 							</a>
 						</div>
