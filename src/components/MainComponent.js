@@ -8,16 +8,21 @@ import Footer from './FooterComponent';
 import About from './AboutComponent';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { addComment } from '../redux/ActionCreators';
 
 const mapStateToProps = (state) => {
 	return {
 		//These 4 will be available as props in Main Component
-		dishes: state.dishes, // These dishes are from redux state
+		dishes: state.dishes, // state.dishes: These dishes are from redux state
 		comments: state.comments,
 		promotions: state.promotions,
 		leaders: state.leaders
 	};
 };
+//dispatch function, the only way to update the state and pass in an action object.
+const mapDispatchToProps = (dispatch) => ({
+	addComment: (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment))
+});
 
 // this is the App component
 class Main extends Component {
@@ -40,12 +45,16 @@ class Main extends Component {
 			return (
 				<div>
 					<Dishdetail
+						//1st attribute
 						dishSelected={
 							this.props.dishes.filter((dish) => dish.id === parseInt(match.params.dishId, 10))[0]
 						}
+						//2nd attribute
 						comments={this.props.comments.filter(
 							(comment) => comment.dishId === parseInt(match.params.dishId, 10)
 						)}
+						//3rd attribute
+						addComment={this.props.addComment}
 					/>
 				</div>
 			);
@@ -68,6 +77,7 @@ class Main extends Component {
 	}
 }
 
-// Connect my component to React Router
-// Connect main component to Redux Store
-export default withRouter(connect(mapStateToProps)(Main));
+// withRouter: Connect my component to React Router
+// mapStateToProps: Connect main component to Redux Store
+// mapDispatchToProps: put addComment to props, so the main can use it as props.addComment
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Main));
