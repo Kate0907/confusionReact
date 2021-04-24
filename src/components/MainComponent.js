@@ -9,6 +9,7 @@ import About from './AboutComponent';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { addComment, fetchDishes } from '../redux/ActionCreators';
+import { actions } from 'react-redux-form';
 
 //Map the state in store to MainComponent
 const mapStateToProps = (state) => {
@@ -20,12 +21,18 @@ const mapStateToProps = (state) => {
 		leaders: state.leaders
 	};
 };
-//dispatch function, the only way to update the state and pass in an action object.
+//Dispatch function, it is the only way to update the state and pass in an action object.
 const mapDispatchToProps = (dispatch) => ({
+	//addComment is a props of MainComponent
 	addComment: (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment)),
-	//dispatch the fetchDishes thunk, so fetchDishes can be made use of MainComponent's props
+	//dispatch the fetchDishes thunk, so fetchDishes can be used as  MainComponent's props
+	//fetchDishes is a props of MainComponent
 	fetchDishes: () => {
 		dispatch(fetchDishes());
+	},
+	//resetFeedbackForm is props of MainComponent, it is dispatched with actions.reset, actions is imported from 'react-redux-form'
+	resetFeedbackForm: () => {
+		dispatch(actions.reset('feedback'));
 	}
 });
 
@@ -89,7 +96,11 @@ class Main extends Component {
 					{/* MenuComponent has a props called dishes which is equal to state.dishes in the store */}
 					<Route exact path="/menu" component={() => <Menu dishes={this.props.dishes} />} />
 					<Route path="/menu/:dishId" component={DishWithId} />
-					<Route exact path="/contactus" component={Contact} />
+					<Route
+						exact
+						path="/contactus"
+						component={() => <Contact resetFeedbackForm={this.props.resetFeedbackForm} />}
+					/>
 					<Route path="/aboutus" component={() => <About leaders={this.props.leaders} />} />
 					<Redirect to="/home" />
 				</Switch>
