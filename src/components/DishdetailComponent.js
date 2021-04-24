@@ -11,15 +11,13 @@ import {
 	Modal,
 	ModalHeader,
 	ModalBody,
-	Form,
-	FormGroup,
-	Input,
 	Label,
 	Col,
 	Row
 } from 'reactstrap';
 import { Control, LocalForm, Errors } from 'react-redux-form';
 import { Link } from 'react-router-dom';
+import { Loading } from './LoadingComponent';
 
 const required = (val) => val && val.length;
 const maxLength = (len) => (val) => !val || val.length <= len;
@@ -93,7 +91,8 @@ class CommentForm extends Component {
 
 	handleComment(values) {
 		this.toggleModal();
-		//The new comment will be added to the list of COMMENTS
+		//The new comment will be added to the redux store's state, but will not alter COMMENT
+		//Will reflect on React view: the new comments will appear in Comments section of webpage
 		this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
 	}
 
@@ -175,8 +174,23 @@ class CommentForm extends Component {
 
 //a funtional component:
 const Dishdetail = (props) => {
-	//Must have this if-else, otherwise system will crash
-	if (props.dishSelected != null) {
+	if (props.isLoading) {
+		return (
+			//to use Bootstrap grid, must has "container" and "row"
+			<div className="container">
+				<div className="row">
+					<Loading />
+				</div>
+			</div>
+		);
+	} else if (props.errMess) {
+		<div className="container">
+			<div className="row">
+				<h4>{props.errMess}</h4>
+			</div>
+		</div>;
+	} else if (props.dishSelected != null) {
+		//Must have this if-else, otherwise system will crash
 		return (
 			<div className="container">
 				<div className="row">
