@@ -13,11 +13,12 @@ export const Dishes = (
 	// switch on action type
 	switch (action.type) {
 		case ActionTypes.ADD_DISHES:
-			return { ...state, isLoading: false, errMess: null, dishes: action.payload }; //action.payload: different action has its own payload,see ActionCreators.js
+			return { ...state, isLoading: false, errMess: null, dishes: action.payload };
+		//action.payload: different action has its own payload,see ActionCreators.js
 
 		case ActionTypes.DISHES_LOADING:
-			//...state: take current value of state， operation is immutable, original state is not changed, create a new state and modify on new state, return the new state
 			return { ...state, isLoading: true, errMess: null, dishes: [] };
+		//...state: take current value of state， operation is immutable, original state is not changed, create a new state and modify on new state, return the new state
 
 		case ActionTypes.DISHES_FAILED:
 			return { ...state, isLoading: false, errMess: action.payload, dishes: [] };

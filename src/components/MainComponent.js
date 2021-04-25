@@ -8,7 +8,7 @@ import Footer from './FooterComponent';
 import About from './AboutComponent';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { addComment, fetchDishes } from '../redux/ActionCreators';
+import { addComment, fetchDishes, fetchComments, fetchPromos } from '../redux/ActionCreators';
 import { actions } from 'react-redux-form';
 
 //Map the state in store to MainComponent
@@ -33,6 +33,12 @@ const mapDispatchToProps = (dispatch) => ({
 	//resetFeedbackForm is props of MainComponent, it is dispatched with actions.reset, actions is imported from 'react-redux-form'
 	resetFeedbackForm: () => {
 		dispatch(actions.reset('feedback'));
+	},
+	fetchComments: () => {
+		dispatch(fetchComments());
+	},
+	fetchPromos: () => {
+		dispatch(fetchPromos());
 	}
 });
 
@@ -43,8 +49,11 @@ class Main extends Component {
 	}
 
 	//lifecycle method, will appear just after vue is mounted
+	//When my main component is mounted, will fetch all these from server
 	componentDidMount() {
 		this.props.fetchDishes();
+		this.props.fetchComments();
+		this.props.fetchPromos();
 	}
 
 	render() {
@@ -58,9 +67,13 @@ class Main extends Component {
 					//3
 					dishesErrMess={this.props.dishes.errMess}
 					//4
-					promotion={this.props.promotions.filter((dish) => dish.featured)[0]}
+					promotion={this.props.promotions.promotions.filter((promo) => promo.featured)[0]}
 					//5
-					leader={this.props.leaders.filter((dish) => dish.featured)[0]}
+					promoLoading={this.props.promotions.isLoading}
+					//6
+					promoErrMess={this.props.promotions.errMess}
+					//7
+					leader={this.props.leaders.filter((leader) => leader.featured)[0]}
 				/>
 			);
 		};
@@ -78,10 +91,12 @@ class Main extends Component {
 						//3
 						errMess={this.props.dishes.errMess}
 						//4
-						comments={this.props.comments.filter(
+						comments={this.props.comments.comments.filter(
 							(comment) => comment.dishId === parseInt(match.params.dishId, 10)
 						)}
-						//4
+						//5
+						commentsErrMess={this.props.comments.errMess}
+						//6
 						addComment={this.props.addComment}
 					/>
 				</div>
