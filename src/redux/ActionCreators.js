@@ -3,16 +3,53 @@ import * as ActionTypes from './ActionTypes';
 import { DISHES } from '../shared/dishes';
 import { baseUrl } from '../shared/baseUrl';
 // => : means return
-//Create an action called addComment
-export const addComment = (dishId, rating, author, comment) => ({
+//create a action, receive a comment and push that comment into the Redux store
+export const addComment = (comment) => ({
 	type: ActionTypes.ADD_COMMENT,
-	payload: {
-		dishId: dishId, //the dishId should be what I receive in the parameter
+	payload: comment
+});
+
+export const postComment = (dishId, rating, author, comment) => (dispatch) => {
+	const newComment = {
+		//create a new Javascript object, map the various parameters we received into this JavaScript object
+		dishId: dishId,
 		rating: rating,
 		author: author,
 		comment: comment
-	}
-});
+	};
+	newComment.date = new Date().toISOString();
+
+	return fetch(baseUrl + 'comments', {
+		method: 'POST',
+		body: JSON.stringify(newComment),
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		credentials: 'same-origin' //will learn in Node js course
+	})
+		.then(
+			(response) => {
+				if (response.ok) {
+					return response;
+				} else {
+					var error = new Error('Error ' + response.status + ': ' + response.statusText);
+					error.response = response;
+					throw error;
+				}
+			},
+			(error) => {
+				//error handler: in this case you don't hear anything from server, no response (such as server is down)
+				var errmess = new Error(error.message);
+				throw errmess;
+			}
+		)
+		.then((response) => response.json())
+		.then((response) => dispatch(addComment(response))) //will be add to Redux store by dispatch it//Only if response is OK
+		.catch((error) => {
+			console.log('Post comments ', error.message);
+			alert('Your comment could not be posted\nError: ' + error.message);
+		});
+};
 //doing 2 dispatches
 //A Thunk: returns a function, call dispatch for several actions
 export const fetchDishes = () => (dispatch) => {
@@ -25,16 +62,17 @@ export const fetchDishes = () => (dispatch) => {
 					//response is ok
 					return response; //This response is then available to the next then
 				} else {
-					//response is not ok, is an error. response.status: error code => 200,304,404 etc
+					//response is not ok, is an error.// response.status: error code => 200,304,404 etc
 					var error = new Error('Error ' + response.status + ': ' + response.statusText);
 					error.response = response;
 					throw error; // error will throw to go over to the last then
 				}
 			},
 			(error) => {
+				//error handler: in this case you don't hear anything from server, no response (such as server is down)
 				var errmess = new Error(error.message);
 				throw errmess;
-			} //error handler: in this case you don't hear anything from server, no response (such as server is down)
+			}
 		)
 		.then((response) => response.json()) //convert response to json file
 		.then((dishes) => dispatch(addDishes(dishes)))
@@ -92,6 +130,7 @@ export const addComments = (comments) => ({
 });
 
 export const fetchPromos = () => (dispatch) => {
+	//This is a thunk, should add (dispatch) here, send the function of a function
 	dispatch(promosLoading(true));
 
 	return fetch(baseUrl + 'promotions')

@@ -8,7 +8,7 @@ import Footer from './FooterComponent';
 import About from './AboutComponent';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { addComment, fetchDishes, fetchComments, fetchPromos } from '../redux/ActionCreators';
+import { postComment, fetchDishes, fetchComments, fetchPromos } from '../redux/ActionCreators';
 import { actions } from 'react-redux-form';
 
 //Map the state in store to MainComponent
@@ -24,7 +24,7 @@ const mapStateToProps = (state) => {
 //Dispatch function, it is the only way to update the state and pass in an action object.
 const mapDispatchToProps = (dispatch) => ({
 	//addComment is a props of MainComponent
-	addComment: (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment)),
+	postComment: (dishId, rating, author, comment) => dispatch(postComment(dishId, rating, author, comment)),
 	//dispatch the fetchDishes thunk, so fetchDishes can be used as  MainComponent's props
 	//fetchDishes is a props of MainComponent
 	fetchDishes: () => {
@@ -97,7 +97,7 @@ class Main extends Component {
 						//5
 						commentsErrMess={this.props.comments.errMess}
 						//6
-						addComment={this.props.addComment}
+						postComment={this.props.postComment}
 					/>
 				</div>
 			);

@@ -42,7 +42,7 @@ function RenderDish({ dish }) {
 	}
 }
 //RenderComments has 3 props
-function RenderComments({ comments, addComment, dishId }) {
+function RenderComments({ comments, postComment, dishId }) {
 	console.log('render the comments');
 	if (comments != null) {
 		const commentList = comments.map((eachComment) => {
@@ -68,7 +68,7 @@ function RenderComments({ comments, addComment, dishId }) {
 					{commentList}
 				</ul>
 
-				<CommentForm dishId={dishId} addComment={addComment} />
+				<CommentForm dishId={dishId} postComment={postComment} />
 			</div>
 		);
 	} else return <div>No dish selected</div>;
@@ -94,7 +94,7 @@ class CommentForm extends Component {
 		this.toggleModal();
 		//The new comment will be added to the redux store's state, but will not alter COMMENT
 		//Will reflect on React view: the new comments will appear in Comments section of webpage
-		this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
+		this.props.postComment(this.props.dishId, values.rating, values.author, values.comment);
 	}
 
 	render() {
@@ -213,7 +213,7 @@ const Dishdetail = (props) => {
 					<div className="col-12 col-md-5 m-1">
 						<RenderComments
 							comments={props.comments}
-							addComment={props.addComment}
+							postComment={props.postComment}
 							dishId={props.dishSelected.id}
 						/>
 					</div>
