@@ -17,10 +17,28 @@ export const addComment = (dishId, rating, author, comment) => ({
 //A Thunk: returns a function, call dispatch for several actions
 export const fetchDishes = () => (dispatch) => {
 	dispatch(dishesLoading(true));
-
+	//fetch the dishes get from server into redux store
 	return fetch(baseUrl + 'dishes')
+		.then(
+			(response) => {
+				if (response.ok) {
+					//response is ok
+					return response; //This response is then available to the next then
+				} else {
+					//response is not ok, is an error. response.status: error code => 200,304,404 etc
+					var error = new Error('Error ' + response.status + ': ' + response.statusText);
+					error.response = response;
+					throw error; // error will throw to go over to the last then
+				}
+			},
+			(error) => {
+				var errmess = new Error(error.message);
+				throw errmess;
+			} //error handler: in this case you don't hear anything from server, no response (such as server is down)
+		)
 		.then((response) => response.json()) //convert response to json file
-		.then((dishes) => dispatch(addDishes(dishes))); //fetch the dishes get from server into redux store
+		.then((dishes) => dispatch(addDishes(dishes)))
+		.catch((error) => dispatch(dishesFailed(error.message))); //we throw 2 errors, either one will be catched
 };
 //A function returns an action. tell user the dishes are laoding...
 export const dishesLoading = () => ({
@@ -40,8 +58,26 @@ export const addDishes = (dishes) => ({
 
 export const fetchComments = () => (dispatch) => {
 	return fetch(baseUrl + 'comments')
+		.then(
+			(response) => {
+				if (response.ok) {
+					//response is ok
+					return response; //This response is then available to the next then
+				} else {
+					//response is not ok, is an error. response.status: error code => 200,304,404 etc
+					var error = new Error('Error ' + response.status + ': ' + response.statusText);
+					error.response = response;
+					throw error; // error will throw to go over to the last then
+				}
+			},
+			(error) => {
+				var errmess = new Error(error.message);
+				throw errmess;
+			} //error handler: in this case you don't hear anything from server, no response
+		)
 		.then((response) => response.json()) //convert response to json file
-		.then((comments) => dispatch(addComments(comments))); //fetch the comments get from server into redux store
+		.then((comments) => dispatch(addComments(comments)))
+		.catch((error) => dispatch(commentsFailed(error.message))); //fetch the comments get from server into redux store
 };
 
 export const commentsFailed = (errmess) => ({
@@ -59,8 +95,26 @@ export const fetchPromos = () => (dispatch) => {
 	dispatch(promosLoading(true));
 
 	return fetch(baseUrl + 'promotions')
+		.then(
+			(response) => {
+				if (response.ok) {
+					//response is ok
+					return response; //This response is then available to the next then
+				} else {
+					//response is not ok, is an error. response.status: error code => 200,304,404 etc
+					var error = new Error('Error ' + response.status + ': ' + response.statusText);
+					error.response = response;
+					throw error; // error will throw to go over to the last then
+				}
+			},
+			(error) => {
+				var errmess = new Error(error.message);
+				throw errmess;
+			} //error handler: in this case you don't hear anything from server, no response
+		)
 		.then((response) => response.json()) //convert response to json file
-		.then((promos) => dispatch(addPromos(promos))); //fetch the dishes get from server into redux store
+		.then((promos) => dispatch(addPromos(promos)))
+		.catch((error) => dispatch(promosFailed(error.message))); //fetch the dishes get from server into redux store
 };
 //A function returns an action. tell user the promotions are laoding...
 export const promosLoading = () => ({
