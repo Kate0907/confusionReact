@@ -22,6 +22,7 @@ class Contact extends Component {
 	handleSubmit(values) {
 		console.log('Current State is: ' + JSON.stringify(values));
 		alert('Current State is: ' + JSON.stringify(values));
+		this.props.postFeedback(values);
 		//when the form is submited, it will reset the form to an empty one
 		this.props.resetFeedbackForm();
 	}
